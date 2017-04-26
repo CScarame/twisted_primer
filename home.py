@@ -9,7 +9,7 @@ class MyConnection(Protocol):
 
 
 
-class MyConnectionFactory(ClientFactory):
+class MyConnectionFactory(ServerFactory):
     def __init__(self):
         self.myconn = MyConnection()
 
@@ -17,6 +17,6 @@ class MyConnectionFactory(ClientFactory):
         return self.myconn
 
 
-reactor.connectTCP("10.25.247.41", 40001, MyConnectionFactory())
+reactor.listenTCP( 40001, MyConnectionFactory())
 
 reactor.run()
