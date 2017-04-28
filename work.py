@@ -34,6 +34,6 @@ class WorkConnectionFactory(ClientFactory):
         elif self.connection_type == "command":
             return self.command_conn
 
-reactor.connectTCP("localhost", 40052, WorkConnectionFactory("command"))
+reactor.connectTCP("ash.campus.nd.edu", 40052, WorkConnectionFactory("command"))
 
 reactor.run()
