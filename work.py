@@ -21,8 +21,7 @@ class CommandConnection(Protocol):
         print "command connection made"
 
 
-class DataConnection(Protocol):
-    
+#class DataConnection(Protocol):    
 
 class WorkConnectionFactory(ClientFactory):
     def __init__(self, connection_type):
@@ -30,11 +29,11 @@ class WorkConnectionFactory(ClientFactory):
 	self.myconn = MyConnection()
         self.command_conn = CommandConnection()
     def buildProtocol(self, addr):
-        if self.connection_type = "test":
+        if self.connection_type == "test":
             return self.myconn
-        elif self.connection_type = "command":
+        elif self.connection_type == "command":
             return self.command_conn
 
-reactor.connectTCP("localhost", 40052, MyConnectionFactory("command"))
+reactor.connectTCP("localhost", 40052, WorkConnectionFactory("command"))
 
 reactor.run()
