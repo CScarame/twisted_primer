@@ -21,8 +21,8 @@ class MyConnection(Protocol):
 	print "connection lost"
 
 class CommandConnection(Protocol):
-    #def connectionMade(self):
-        #print "Command Connection Established"
+    def connectionMade(self):
+        print "Command Connection Established"
     def dataReceived(self,data):
         #print "command: ",
         #print data

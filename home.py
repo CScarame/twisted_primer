@@ -21,7 +21,7 @@ class InputConnection(Protocol):
 
 class CommandConnection(Protocol):
     def connectionMade(self):
-        #print "Command Connection Received"
+        print "Command Connection Received"
         # wait for client to connect
         reactor.listenTCP(42052, HomeConnectionFactory("client", self))
     #def dataReceived(self, data):
