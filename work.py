@@ -3,6 +3,9 @@ from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 from twisted.internet.defer import DeferredQueue
 
+URL = "ash.campus.nd.edu"
+
+
 class MyConnection(Protocol):
 
     def connectionMade(self):
@@ -18,14 +21,14 @@ class MyConnection(Protocol):
 	print "connection lost"
 
 class CommandConnection(Protocol):
-    def connectionMade(self):
-        print "Command Connection Established"
+    #def connectionMade(self):
+        #print "Command Connection Established"
     def dataReceived(self,data):
-        print "command: ",
-        print data
+        #print "command: ",
+        #print data
         if data == "connect":
-            print "Connecting Data"
-            reactor.connectTCP("10.25.247.41", 41052, WorkConnectionFactory("data",self))
+            #print "Connecting Data"
+            reactor.connectTCP(URL, 41052, WorkConnectionFactory("data",self))
 
 class DataConnection(Protocol):
     def __init__(self,command):
@@ -33,18 +36,18 @@ class DataConnection(Protocol):
         self.service = None
         self.data = DeferredQueue()
     def connectionMade(self):
-        print "Data Connection Established"
+        #print "Data Connection Established"
         reactor.connectTCP("localhost", 22, WorkConnectionFactory("service", self.command_conn, self))
     def dataReceived(self,data):
-        print "data: ",
-        print data
+        #print "data: ",
+        #print data
         self.data.put(data)
     def setService(self, service):
         self.service_conn = service
-        print "Service Connected to data"
+        #print "Service Connected to data"
         self.data.get().addCallback(self.serveData)
     def serveData(self, data):
-        print "Data SERVED!"
+        #print "Data SERVED!"
         self.service_conn.transport.write(data)
         self.data.get().addCallback(self.serveData)
 
@@ -53,11 +56,11 @@ class ServiceConnection(Protocol):
         self.command_conn = command
         self.data_conn = data
     def connectionMade(self):
-        print "Service Connection Established"
+        #print "Service Connection Established"
         self.data_conn.setService(self)
     def dataReceived(self,data):
-        print "service: ",
-        print data
+        #print "service: ",
+        #print data
         self.data_conn.transport.write(data)
         
 
@@ -85,6 +88,6 @@ class WorkConnectionFactory(ClientFactory):
             return self.service_conn
 
 if __name__ == "__main__":
-    reactor.connectTCP("10.25.247.41", 40052, WorkConnectionFactory("command"))
+    reactor.connectTCP(URL, 40052, WorkConnectionFactory("command"))
 
 reactor.run()
